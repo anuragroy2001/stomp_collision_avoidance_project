@@ -12,13 +12,17 @@ qo_cost = zeros(1, nDiscretize);
 qc_cost = zeros(1, nDiscretize);
 
 % Get the coordinates of joints in World frame 
-[X, ~] = updateJointsWorldPosition(robot_struct, theta(:, 1));
+[X, T_end_effector] = updateJointsWorldPosition(robot_struct, theta(:, 1));
 % Construct the spheres around the robot manipulator for collision
 % avoidance
 [sphere_centers,radi] = stompRobotSphere(X);
 % Initial velocity at the sphere centers around the manipulator is 0
 vel = zeros(length(sphere_centers), 1);
 qo_cost(1) = stompObstacleCost(sphere_centers,radi, voxel_world, vel);
+
+% Add orientation constraint for first waypoint
+a = T_end_effector{6}(1:3, 3) - [0; 0; 1];
+qc_cost(1) = a' * a;
 
 for i = 2 : nDiscretize
     sphere_centers_prev = sphere_centers;
@@ -34,13 +38,13 @@ for i = 2 : nDiscretize
     qo_cost(i) = stompObstacleCost(sphere_centers,radi, voxel_world, vel);
     
     %% TODO: Define your qc_cost to add constraint on the end-effector
-    a = T_end_effector{6}(1:3,2)-[0;0;1];
+    a = T_end_effector{6}(1:3,3)-[0;0;1];
     qc_cost(i) = a'*a;
 
 end
 
 %% Local trajectory cost: you need to specify the relative weights between different costs
-Stheta = 1000*qo_cost + 500*qc_cost;
+Stheta = 1000*qo_cost + 0*qc_cost;
 
 % sum over time and add the smoothness cost
 theta = theta(:, 2:end-1);

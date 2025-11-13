@@ -98,7 +98,7 @@ while abs(Qtheta - QthetaOld) > convergenceThreshold
     theta_animation{iter}=theta;
 
     % Set the stopping iteration criteria:
-    if iter > 50 
+    if iter > 100 
         disp('Maximum iteration (50) has reached.')
         break
     end
