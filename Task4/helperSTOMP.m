@@ -1,7 +1,7 @@
 %Parameters
 % T = 5; 
-nDiscretize = 50; % number of discretized waypoint
-nPaths = 10; % number of sample paths
+nDiscretize = 20; % number of discretized waypoint
+nPaths = 20; % number of sample paths
 convergenceThreshold = 0.01; % convergence threshhold
 
 % Initial guess of joint angles theta is just linear interpolation of q0
@@ -13,6 +13,9 @@ theta=zeros(numJoints, nDiscretize);
 for k=1:length(q0)
     theta(k,:) = linspace(q0(k), qT(k), nDiscretize);
 end
+
+% bumpAmplitude = 0.6;
+% theta(3,:) = theta(3,:) + bumpAmplitude * sin(linspace(0, pi, nDiscretize));
 
 % by default, it loads the robot with the structure data format
 robot_struct = loadrobot(robot_name); 
@@ -95,10 +98,12 @@ while abs(Qtheta - QthetaOld) > convergenceThreshold
     theta_animation{iter}=theta;
 
     % Set the stopping iteration criteria:
-    if iter > 2000 
+    if iter > 1000 
         disp('Maximum iteration (50) has reached.')
         break
     end
+    
+    % fprintf('Previous Qθ = %.6f | New Qθ = %.6f | ΔQ = %.6f\n', QthetaOld, Qtheta, abs(Qtheta - QthetaOld));
 
     if sum(dtheta_smoothed,'all') == 0
     disp('Estimated gradient is 0 and Theta is not updated: there could be no obstacle at all')
@@ -108,11 +113,6 @@ while abs(Qtheta - QthetaOld) > convergenceThreshold
 end
 
 disp('STOMP Finished.');
-
-
-
-
-
 
 %% check collision
 inCollision = false(nDiscretize, 1); % initialization the collision status vector

@@ -24,7 +24,7 @@ view(ax1, 150, 29);
 hold(ax1, 'on');
 
 % Lock axis limits and aspect ratio (for stable camera view)
-axis(ax1, [-0.8 0.8 -0.6 0.7 -0.2 0.7]);
+axis(ax1, [-0.8 1.0 -0.6 1.0 -0.2 1.0]);
 axis(ax1, 'vis3d');
 daspect(ax1, [1 1 1]);
 

@@ -17,73 +17,55 @@ binary_world = zeros(Env_size(2, 1) / voxel_size(1), Env_size(2, 2) / voxel_size
 
 %% Static obstacles
 %%%%%%%%%%%%%%Scene 1$%%%%%%%%%%%%%
-% lbox = 0.08*2; % length of the cube
-% box_center = [0.0 -0.2 0.26]; % (metric) world coordinates of the box center
-% aObs = collisionBox(lbox,lbox,lbox);  
-% aObs.Pose = trvec2tform(box_center);    
-% lbox = 0.08*2; % length of the cube
-% box2_center = [0.25 -0.0 0.2]; % (metric) world coordinates of the box center
-% aObs2 = collisionBox(lbox,lbox,0.3);  
-% aObs2.Pose = trvec2tform(box2_center);
-%%%%%%%%%%%%%%Scene 1$%%%%%%%%%%%%%
+% box_center = [0.4 0.5 0.6]; % (metric) world coordinates of the box center
+% aObs = collisionBox(0.6,0.3,0.04);  
+% aObs.Pose = trvec2tform(box_center);   
+% box_center = [0.4 0.5 0.2]; % (metric) world coordinates of the box center
+% aObs2 = collisionBox(0.6,0.3,0.04);  
+% aObs2.Pose = trvec2tform(box_center);
+% box_center = [0.5 0.0 0.0]; % (metric) world coordinates of the box center
+% aObs3 = collisionBox(0.3,0.3,0.3);  
+% aObs3.Pose = trvec2tform(box_center);
+% box_center = [0.3 -0.3 0.0]; % (metric) world coordinates of the box center
+% aObs4 = collisionBox(0.5,0.04,1.0);  
+% aObs4.Pose = trvec2tform(box_center);   
+% world = {aObs, aObs2, aObs3, aObs4};
+%%%%%%%%%%%%%%Scene 2$%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%Scene 2$%%%%%%%%%%%%%
-box_center = [0.5 0.0 0.4]; % (metric) world coordinates of the box center
-aObs = collisionBox(0.6,0.3,0.04);  
-aObs.Pose = trvec2tform(box_center);   
-box2_center = [0.0 -0.0 0.6]; % (metric) world coordinates of the box center
-aObs2 = collisionBox(0.2,0.2,0.1);  
-aObs2.Pose = trvec2tform(box2_center);   
+% box_center = [0.0 0.5 0.4]; % (metric) world coordinates of the box center
+% aObs = collisionBox(0.04,0.5,0.4);  
+% aObs.Pose = trvec2tform(box_center);   
+% box_center = [0.0 -0.3 0.0]; % (metric) world coordinates of the box center
+% aObs2 = collisionBox(0.5,0.04,1.0);  
+% aObs2.Pose = trvec2tform(box_center);   
+% box_center = [-0.5 0.5 0.4]; % (metric) world coordinates of the box center
+% aObs3 = collisionBox(0.04,0.5,0.4);  
+% aObs3.Pose = trvec2tform(box_center);   
+% box_center = [0.5 0.5 0.4]; % (metric) world coordinates of the box center
+% aObs4 = collisionBox(0.04,0.5,0.4);  
+% aObs4.Pose = trvec2tform(box_center);   
+% world = {aObs, aObs2, aObs3, aObs4};
 %%%%%%%%%%%%%%Scene 2$%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%Scene 3$%%%%%%%%%%%%%
-% box_center = [0.0 0.4 0.4]; % (metric) world coordinates of the box center
-% aObs = collisionBox(0.04,0.4,0.2);  
-% aObs.Pose = trvec2tform(box_center);   
-% box2_center = [0.0 -0.0 0.6]; % (metric) world coordinates of the box center
-% aObs2 = collisionBox(0.2,0.2,0.1);  
-% aObs2.Pose = trvec2tform(box2_center);   
-%%%%%%%%%%%%%%Scene 2$%%%%%%%%%%%%%
+box_center = [0.0 -0.3 0.0]; % (metric) world coordinates of the box center
+aObs = collisionBox(0.5,0.04,1.0);  
+aObs.Pose = trvec2tform(box_center);   
+box_center = [-0.15 0.3 0.1]; % (metric) world coordinates of the box center
+aObs2 = collisionBox(0.3,0.3,0.2);  
+aObs2.Pose = trvec2tform(box_center);   
+box_center = [0.15 0.3 0.6]; % (metric) world coordinates of the box center
+aObs3 = collisionBox(0.3,0.3,0.2);  
+aObs3.Pose = trvec2tform(box_center);   
+world = {aObs, aObs2, aObs3};
+%%%%%%%%%%%%%%Scene 1$%%%%%%%%%%%%%
 
-% Set static obstacles
-world = {aObs, aObs2}; % try adding more static obstacles aObs to dObs or create your own
-% world = {aObs}; % try adding more static obstacles aObs to dObs or create your own
+
 %% Visulaization the obstacle
 for i=1: length(world)
     show(world{i})
 end
-
-%% voxelize the box obstacles
-% cube_metric = [box_center-lbox/2;
-%                 lbox,lbox,lbox]; % [xmin, ymin, zmin] for 1st row, xyz-lengths for 2nd row
-% % range (lower and upper limits) of the cube voxel
-% % The number inside ceil is always positive
-% cube_voxel = [ceil((cube_metric(1, :)-Env_size(1,:))./voxel_size); ...
-%     ceil((cube_metric(1, :) + cube_metric(2, :)-Env_size(1,:))./voxel_size)];
-% 
-% % Update the cube occupancy in the voxel world
-% % First generate the 3D grid coordinates (x,y,z subcripts) of cube in the voxel world
-% [xc, yc, zc] = meshgrid(cube_voxel(1, 1):cube_voxel(2, 1), cube_voxel(1, 2):cube_voxel(2, 2), cube_voxel(1, 3):cube_voxel(2, 3));
-% % Set the corresponding voxel occupancy to 1, meaning occupied
-% binary_world(sub2ind([Env_size(2, 1) / voxel_size(1), Env_size(2, 2) / voxel_size(2), Env_size(2, 3) / voxel_size(3)], xc, yc, zc)) = 1;
-% 
-% % % plot the occupied voxel with a marker *
-% % plot3(xc(:), yc(:), zc(:), '*');
-% % % Or you can use the volumeViewer() from the Image Processing Toolbox to 
-% % % display the voxel_world in 3D. 
-% % volumeViewer(voxel_world);
-% 
-% %% construct signed Euclidean Distance for the voxel world
-% % Only approximation if the voxel is not a cube
-% voxel_world_sEDT = prod(voxel_size) ^ (1/3) * sEDT_3d(binary_world);
-% 
-% 
-% voxel_world.voxel_size = voxel_size;
-% voxel_world.voxel = binary_world;
-% % voxel_world.offset =  binary_world_offset;
-% voxel_world.world_size = size(binary_world);
-% voxel_world.Env_size = Env_size; % in metric 
-% voxel_world.sEDT =  voxel_world_sEDT;
 
 %% voxelize all obstacles in 'world'
 binary_world = zeros(Env_size(2, 1) / voxel_size(1), ...
